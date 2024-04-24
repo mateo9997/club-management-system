@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ClubService {
@@ -23,13 +24,13 @@ public class ClubService {
     }
 
     public Club getClubDetails(Long id) {
-        return clubRepository.findById(id).orElseThrow(() -> new RuntimeException("Club not found"));
+        return clubRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Club not found"));
     }
 
     @Transactional
     public Club updateClub(Long clubId, Club clubDetails) {
         Club club = clubRepository.findById(clubId)
-                .orElseThrow(() -> new RuntimeException("Club not found with id: " + clubId));
+                .orElseThrow(() -> new NoSuchElementException("Club not found with id: " + clubId));
 
         club.setOfficialName(clubDetails.getOfficialName());
         club.setPopularName(clubDetails.getPopularName());
