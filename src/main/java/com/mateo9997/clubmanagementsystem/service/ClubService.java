@@ -35,7 +35,6 @@ public class ClubService {
         club.setPopularName(clubDetails.getPopularName());
         club.setFederation(clubDetails.getFederation());
         club.setPublic(clubDetails.isPublic());
-        // Update other fields
 
         return clubRepository.save(club);
     }
