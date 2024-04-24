@@ -1,6 +1,7 @@
 package com.mateo9997.clubmanagementsystem.model;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "players")
@@ -11,7 +12,7 @@ public class Player {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "club_id")
+    @JoinColumn(name = "club_id", nullable = false)
     private Club club;
 
     @Column(nullable = false)
@@ -27,7 +28,8 @@ public class Player {
     private String email;
 
     @Column(name = "date_of_birth", nullable = false)
-    private String dateOfBirth;
+    @Temporal(TemporalType.DATE)
+    private Date dateOfBirth;
 
     public Long getId() {
         return id;
@@ -77,13 +79,12 @@ public class Player {
         this.email = email;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
-
 }
 
