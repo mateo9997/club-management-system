@@ -46,45 +46,45 @@ public class AuthenticationControllerTest {
     @MockBean
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
-//    @Test
-//    public void authenticateUser_Success() throws Exception {
-//        // Given
-//        Club club = new Club();
-//        club.setUsername("user@test.com");
-//        club.setPassword("password");
-//        String token = "mockedToken";
-//
-//        Authentication auth = mock(Authentication.class);
-//        UserDetails userDetails = mock(UserDetails.class);
-//        when(userDetails.getUsername()).thenReturn(club.getUsername());
-//        when(authenticationManager.authenticate(any())).thenReturn(auth);
-//        when(auth.getPrincipal()).thenReturn(userDetails);
-//        when(jwtUtil.generateToken(anyString())).thenReturn(token);
-//
-//        // When & Then
-//        mockMvc.perform(post("/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(club)))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.jwt").value(token));  // Ensure JSON path matches "jwt" field in AuthenticationResponse
-//
-//        verify(jwtUtil).generateToken(club.getUsername());
-//    }
-//
-//    @Test
-//    public void authenticateUser_InvalidCredentials() throws Exception {
-//        // Given
-//        Club club = new Club();
-//        club.setUsername("user@test.com");
-//        club.setPassword("wrongpassword");
-//
-//        doThrow(new BadCredentialsException("Invalid credentials")).when(authenticationManager).authenticate(any());
-//
-//        // When & Then
-//        mockMvc.perform(post("/login")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(club)))
-//                .andExpect(status().isUnauthorized());  // Expect HTTP 401 Unauthorized
-//    }
+    @Test
+    public void authenticateUser_Success() throws Exception {
+        // Given
+        Club club = new Club();
+        club.setUsername("user@test.com");
+        club.setPassword("password");
+        String token = "mockedToken";
+
+        Authentication auth = mock(Authentication.class);
+        UserDetails userDetails = mock(UserDetails.class);
+        when(userDetails.getUsername()).thenReturn(club.getUsername());
+        when(authenticationManager.authenticate(any())).thenReturn(auth);
+        when(auth.getPrincipal()).thenReturn(userDetails);
+        when(jwtUtil.generateToken(anyString())).thenReturn(token);
+
+        // When & Then
+        mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.jwt").value(token));  // Ensure JSON path matches "jwt" field in AuthenticationResponse
+
+        verify(jwtUtil).generateToken(club.getUsername());
+    }
+
+    @Test
+    public void authenticateUser_InvalidCredentials() throws Exception {
+        // Given
+        Club club = new Club();
+        club.setUsername("user@test.com");
+        club.setPassword("wrongpassword");
+
+        doThrow(new BadCredentialsException("Invalid credentials")).when(authenticationManager).authenticate(any());
+
+        // When & Then
+        mockMvc.perform(post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(club)))
+                .andExpect(status().isUnauthorized());  // Expect HTTP 401 Unauthorized
+    }
 
 }

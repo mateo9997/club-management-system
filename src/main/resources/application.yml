@@ -9,10 +9,9 @@ spring:
       ddl-auto: update
     show-sql: true
   flyway:
-    url: ${JDBC_DATABASE_URL}
-    user: ${JDBC_DATABASE_USERNAME}
-    password: ${JDBC_DATABASE_PASSWORD}
-    baseline-on-migrate: true
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/clubmanagementsystem}
+    user: ${JDBC_DATABASE_USERNAME:myuser}
+    password: ${JDBC_DATABASE_PASSWORD:mypassword}
     locations: classpath:db/migration
 jwt:
   secret: ${JWT_SECRET:ActualVerySecretKey}
