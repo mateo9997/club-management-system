@@ -1,5 +1,6 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
+import com.mateo9997.clubmanagementsystem.dto.ClubDTO;
 import com.mateo9997.clubmanagementsystem.dto.ClubPublicInfo;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
@@ -22,6 +23,7 @@ public class ClubController {
 
     @PostMapping
     public Club registerClub(@RequestBody Club club) {
+        System.out.println("Received password: " + club.getPassword());
         return clubService.registerClub(club);
     }
 
@@ -49,7 +51,7 @@ public class ClubController {
             throw new AccessDeniedException("Access denied");
         }
 
-        Club club = clubService.getClubDetails(clubId);
+        ClubDTO club = clubService.getClubDetails(clubId);
         return ResponseEntity.ok(club);
     }
 
