@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -57,6 +58,22 @@ public class ClubControllerIntegrationTest {
         // Clean up the database before each test
         clubRepository.deleteAll();
         clubRepository.flush();
+
+        Club createClub = new Club();
+        createClub.setUsername("info@townfc.com");
+        createClub.setPassword("iTk19!n.");
+        createClub.setOfficialName("Town Football Club");
+        createClub.setPopularName("Town FC");
+        createClub.setFederation("UEFA");
+        createClub.setPublic(true);
+
+        mockMvc.perform(post("/club")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createClub)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("info@townfc.com"))
+                .andExpect(jsonPath("$.officialName").value("Town Football Club"));
+
 
         String uniqueUsername = "uniqueTestClub_";
         Club newClub = new Club();
@@ -122,7 +139,7 @@ public class ClubControllerIntegrationTest {
         mockMvc.perform(get("/club")
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[*]", hasSize(2)))  // Expect 2 public clubs in the list
+                .andExpect(jsonPath("$.[*]", hasSize(3)))  // Expect 2 public clubs in the list
                 .andExpect(jsonPath("$.[0].public").value(true))
                 .andExpect(jsonPath("$.[1].public").value(true))
                 .andExpect(jsonPath("$.[*].password").doesNotExist()); // Ensure passwords are not exposed
