@@ -1,5 +1,6 @@
 package com.mateo9997.clubmanagementsystem.service;
 
+import com.mateo9997.clubmanagementsystem.dto.ClubDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.repository.ClubRepository;
 import org.junit.jupiter.api.Test;
@@ -52,7 +53,7 @@ public class ClubServiceTest {
 
         when(clubRepository.findById(1L)).thenReturn(Optional.of(club));
 
-        Club foundClub = clubService.getClubDetails(1L);
+        ClubDTO foundClub = clubService.getClubDetails(1L);
 
         assertEquals(1L, foundClub.getId());
         verify(clubRepository).findById(1L);

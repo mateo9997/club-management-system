@@ -1,5 +1,6 @@
 package com.mateo9997.clubmanagementsystem.service;
 
+import com.mateo9997.clubmanagementsystem.dto.ClubDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,22 @@ public class ClubService {
 
     }
 
-    public Club getClubDetails(Long id) {
-        return clubRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Club not found"));
+    public ClubDTO getClubDetails(Long id) {
+        Club club = clubRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Club not found"));
+        return mapToDTO(club);
     }
+
+    private ClubDTO mapToDTO(Club club) {
+        ClubDTO dto = new ClubDTO();
+        dto.setId(club.getId());
+        dto.setUsername(club.getUsername());
+        dto.setOfficialName(club.getOfficialName());
+        dto.setPopularName(club.getPopularName());
+        dto.setFederation(club.getFederation());
+        dto.setPublic(club.isPublic());
+        return dto;
+    }
+
 
     @Transactional
     public Club updateClub(Long clubId, Club clubDetails) {
