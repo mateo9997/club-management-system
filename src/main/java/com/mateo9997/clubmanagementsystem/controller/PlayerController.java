@@ -1,9 +1,13 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
+import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
+import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,58 +20,59 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
+    // Methods with added security checks
     // Create a new player
     @PostMapping
     public ResponseEntity<?> createPlayer(@PathVariable Long clubId, @RequestBody Player player) {
-        try {
-            Player newPlayer = playerService.createPlayer(clubId, player);
-            return new ResponseEntity<>(newPlayer, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error creating player: " + e.getMessage());
-        }
+        verifyClubAccess(clubId);
+        Player newPlayer = playerService.createPlayer(clubId, player);
+        return ResponseEntity.ok(newPlayer);
     }
 
     // List all players in a club
     @GetMapping
     public ResponseEntity<List<Player>> listPlayers(@PathVariable Long clubId) {
-        try {
-            List<Player> players = playerService.listPlayers(clubId);
-            return ResponseEntity.ok(players);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        verifyClubAccess(clubId);
+        List<Player> players = playerService.listPlayers(clubId);
+        return ResponseEntity.ok(players);
     }
 
     // Get details of a specific player
     @GetMapping("/{playerId}")
     public ResponseEntity<?> getPlayerDetails(@PathVariable Long clubId, @PathVariable Long playerId) {
-        try {
-            Player player = playerService.getPlayerDetails(clubId, playerId);
-            return ResponseEntity.ok(player);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Player not found");
-        }
+        verifyClubAccess(clubId);
+        Player player = playerService.getPlayerDetails(clubId, playerId);
+        return ResponseEntity.ok(player);
     }
 
     // Update player details
     @PutMapping("/{playerId}")
     public ResponseEntity<?> updatePlayer(@PathVariable Long clubId, @PathVariable Long playerId, @RequestBody Player playerDetails) {
-        try {
-            Player updatedPlayer = playerService.updatePlayer(clubId, playerId, playerDetails);
-            return ResponseEntity.ok(updatedPlayer);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error updating player: " + e.getMessage());
-        }
+        verifyClubAccess(clubId);
+        Player updatedPlayer = playerService.updatePlayer(clubId, playerId, playerDetails);
+        return ResponseEntity.ok(updatedPlayer);
     }
 
     // Delete a player
     @DeleteMapping("/{playerId}")
     public ResponseEntity<?> deletePlayer(@PathVariable Long clubId, @PathVariable Long playerId) {
-        try {
-            playerService.deletePlayer(clubId, playerId);
-            return ResponseEntity.ok().body("Player deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error deleting player: " + e.getMessage());
+        verifyClubAccess(clubId);
+        playerService.deletePlayer(clubId, playerId);
+        return ResponseEntity.ok("Player deleted successfully");
+    }
+
+    private void verifyClubAccess(Long clubId) {
+        Club requestingClub = getAuthenticatedClub();
+        if (!requestingClub.getId().equals(clubId)) {
+            throw new AccessDeniedException("Access denied");
         }
+    }
+
+    private Club getAuthenticatedClub() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof ClubUserDetails) {
+            return ((ClubUserDetails) authentication.getPrincipal()).getClub();
+        }
+        throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
     }
 }

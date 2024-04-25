@@ -2,9 +2,12 @@ package com.mateo9997.clubmanagementsystem.controller;
 
 import com.mateo9997.clubmanagementsystem.dto.ClubPublicInfo;
 import com.mateo9997.clubmanagementsystem.model.Club;
+import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,26 +25,6 @@ public class ClubController {
         return clubService.registerClub(club);
     }
 
-    @GetMapping("/{clubId}")
-    public ResponseEntity<?> getClubDetails(@PathVariable Long clubId) {
-        try {
-            Club club = clubService.getClubDetails(clubId);
-            return ResponseEntity.ok(club);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Club not found");
-        }
-    }
-
-    @PutMapping("/{clubId}")
-    public ResponseEntity<?> updateClub(@PathVariable Long clubId, @RequestBody Club clubDetails) {
-        try {
-            Club updatedClub = clubService.updateClub(clubId, clubDetails);
-            return ResponseEntity.ok(updatedClub);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Club not found");
-        }
-    }
-
     // Get all public clubs
     @GetMapping
     public ResponseEntity<List<ClubPublicInfo>> listPublicClubs() {
@@ -57,5 +40,39 @@ public class ClubController {
 
         return ResponseEntity.ok(publicClubs);
     }
+
+    // Get details of a specific club
+    @GetMapping("/{clubId}")
+    public ResponseEntity<?> getClubDetails(@PathVariable Long clubId) {
+        Club requestingClub = getAuthenticatedClub();
+        if (!requestingClub.getId().equals(clubId)) {
+            throw new AccessDeniedException("Access denied");
+        }
+
+        Club club = clubService.getClubDetails(clubId);
+        return ResponseEntity.ok(club);
+    }
+
+    // Update club details
+    @PutMapping("/{clubId}")
+    public ResponseEntity<?> updateClub(@PathVariable Long clubId, @RequestBody Club clubDetails) {
+        Club requestingClub = getAuthenticatedClub();
+        if (!requestingClub.getId().equals(clubId)) {
+            throw new AccessDeniedException("Access denied");
+        }
+
+        Club updatedClub = clubService.updateClub(clubId, clubDetails);
+        return ResponseEntity.ok(updatedClub);
+    }
+
+
+    private Club getAuthenticatedClub() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof ClubUserDetails) {
+            return ((ClubUserDetails) authentication.getPrincipal()).getClub();
+        }
+        throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
+    }
+
 
 }

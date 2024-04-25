@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -23,7 +24,7 @@ public class PlayerService {
     @Transactional
     public Player createPlayer(Long clubId, Player player) {
         Club club = clubRepository.findById(clubId)
-                .orElseThrow(() -> new RuntimeException("Club not found with id: " + clubId));
+                .orElseThrow(() -> new NoSuchElementException("Club not found with id: " + clubId));
 
         player.setClub(club);
         return playerRepository.save(player);
@@ -37,7 +38,7 @@ public class PlayerService {
     @Transactional
     public Player updatePlayer(Long clubId, Long playerId, Player playerDetails) {
         Player player = playerRepository.findByIdAndClubId(playerId, clubId)
-                .orElseThrow(() -> new RuntimeException("Player not found with id: " + playerId));
+                .orElseThrow(() -> new NoSuchElementException("Player not found with id: " + playerId));
 
         player.setGivenName(playerDetails.getGivenName());
         player.setFamilyName(playerDetails.getFamilyName());
@@ -51,7 +52,7 @@ public class PlayerService {
     @Transactional
     public void deletePlayer(Long clubId, Long playerId) {
         Player player = playerRepository.findByIdAndClubId(playerId, clubId)
-                .orElseThrow(() -> new RuntimeException("Player not found with id: " + playerId));
+                .orElseThrow(() -> new NoSuchElementException("Player not found with id: " + playerId));
 
         playerRepository.delete(player);
     }
@@ -59,6 +60,6 @@ public class PlayerService {
     @Transactional
     public Player getPlayerDetails(Long clubId, Long playerId) {
         return playerRepository.findByIdAndClubId(playerId, clubId)
-                .orElseThrow(() -> new RuntimeException("Player not found with id: " + playerId + " and clubId: " + clubId));
+                .orElseThrow(() -> new NoSuchElementException("Player not found with id: " + playerId + " and clubId: " + clubId));
     }
 }
