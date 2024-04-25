@@ -1,6 +1,8 @@
 spring:
   datasource:
-    url: ${JDBC_DATABASE_URL:${DATABASE_URL}}
+    url: ${JDBC_DATABASE_URL:#{'jdbc:postgresql://localhost:5432/clubmanagementsystem'}}
+    username: ${JDBC_DATABASE_USERNAME:myuser}
+    password: ${JDBC_DATABASE_PASSWORD:mypassword}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
