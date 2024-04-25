@@ -1,5 +1,7 @@
 package com.mateo9997.clubmanagementsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +16,7 @@ public class Club {
 
     @Column(nullable = false, unique = true)
     private String username;
-
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 

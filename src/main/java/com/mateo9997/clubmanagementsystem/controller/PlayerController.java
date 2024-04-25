@@ -2,6 +2,7 @@ package com.mateo9997.clubmanagementsystem.controller;
 
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
+import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -69,6 +70,9 @@ public class PlayerController {
 
     private Club getAuthenticatedClub() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return (Club) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof ClubUserDetails) {
+            return ((ClubUserDetails) authentication.getPrincipal()).getClub();
+        }
+        throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
     }
 }

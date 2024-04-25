@@ -21,6 +21,7 @@ public class ClubService {
         String encodedPassword = passwordEncoder.encode(club.getPassword());
         club.setPassword(encodedPassword);
         return clubRepository.save(club);
+
     }
 
     public Club getClubDetails(Long id) {
@@ -42,5 +43,9 @@ public class ClubService {
 
     public List<Club> findAllPublicClubs() {
         return clubRepository.findByIsPublic(true);
+    }
+
+    public Club findByUsername(String username) {
+        return clubRepository.findByUsername(username);
     }
 }
