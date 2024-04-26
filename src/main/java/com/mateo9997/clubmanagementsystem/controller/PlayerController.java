@@ -1,5 +1,6 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
+import com.mateo9997.clubmanagementsystem.dto.PlayerDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
 import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
@@ -11,7 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/club/{clubId}/player")
@@ -26,31 +30,43 @@ public class PlayerController {
     public ResponseEntity<?> createPlayer(@PathVariable Long clubId, @RequestBody Player player) {
         verifyClubAccess(clubId);
         Player newPlayer = playerService.createPlayer(clubId, player);
-        return ResponseEntity.ok(newPlayer);
+        PlayerDTO playerDTO = mapToDTO(newPlayer);
+        return ResponseEntity.ok(playerDTO);
     }
 
     // List all players in a club
     @GetMapping
-    public ResponseEntity<List<Player>> listPlayers(@PathVariable Long clubId) {
+    public ResponseEntity<List<Map<String, Object>>> listPlayers(@PathVariable Long clubId) {
         verifyClubAccess(clubId);
         List<Player> players = playerService.listPlayers(clubId);
-        return ResponseEntity.ok(players);
+        List<Map<String, Object>> playerSummaries = players.stream()
+                .map(player -> {
+                    Map<String, Object> summary = new HashMap<>();
+                    summary.put("id", player.getId());
+                    summary.put("givenName", player.getGivenName());
+                    summary.put("familyName", player.getFamilyName());
+                    return summary;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(playerSummaries);
     }
 
     // Get details of a specific player
     @GetMapping("/{playerId}")
-    public ResponseEntity<?> getPlayerDetails(@PathVariable Long clubId, @PathVariable Long playerId) {
+    public ResponseEntity<PlayerDTO> getPlayerDetails(@PathVariable Long clubId, @PathVariable Long playerId) {
         verifyClubAccess(clubId);
         Player player = playerService.getPlayerDetails(clubId, playerId);
-        return ResponseEntity.ok(player);
+        PlayerDTO dto = mapToDTO(player);
+        return ResponseEntity.ok(dto);
     }
 
     // Update player details
     @PutMapping("/{playerId}")
-    public ResponseEntity<?> updatePlayer(@PathVariable Long clubId, @PathVariable Long playerId, @RequestBody Player playerDetails) {
+    public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable Long clubId, @PathVariable Long playerId, @RequestBody Player playerDetails) {
         verifyClubAccess(clubId);
         Player updatedPlayer = playerService.updatePlayer(clubId, playerId, playerDetails);
-        return ResponseEntity.ok(updatedPlayer);
+        PlayerDTO dto = mapToDTO(updatedPlayer);
+        return ResponseEntity.ok(dto);
     }
 
     // Delete a player
@@ -74,5 +90,16 @@ public class PlayerController {
             return ((ClubUserDetails) authentication.getPrincipal()).getClub();
         }
         throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
+    }
+
+    private PlayerDTO mapToDTO(Player player) {
+        PlayerDTO dto = new PlayerDTO();
+        dto.setId(player.getId());
+        dto.setGivenName(player.getGivenName());
+        dto.setFamilyName(player.getFamilyName());
+        dto.setNationality(player.getNationality());
+        dto.setEmail(player.getEmail());
+        dto.setDateOfBirth(player.getDateOfBirth());
+        return dto;
     }
 }

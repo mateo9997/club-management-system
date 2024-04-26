@@ -22,7 +22,7 @@ public class ClubController {
     private ClubService clubService;
 
     @PostMapping
-    public Club registerClub(@RequestBody Club club) {
+    public ClubDTO registerClub(@RequestBody Club club) {
         System.out.println("Received password: " + club.getPassword());
         return clubService.registerClub(club);
     }
@@ -63,7 +63,7 @@ public class ClubController {
             throw new AccessDeniedException("Access denied");
         }
 
-        Club updatedClub = clubService.updateClub(clubId, clubDetails);
+        ClubDTO updatedClub = clubService.updateClub(clubId, clubDetails);
         return ResponseEntity.ok(updatedClub);
     }
 
