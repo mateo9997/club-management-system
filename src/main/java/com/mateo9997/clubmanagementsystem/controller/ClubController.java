@@ -26,8 +26,8 @@ public class ClubController {
         return clubService.registerClub(club);
     }
 
-    @GetMapping
-    public String registerClub() {
+    @PostMapping("{/health}")
+    public String health() {
         return "health";
     }
 
