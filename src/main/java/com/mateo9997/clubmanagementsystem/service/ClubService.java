@@ -18,11 +18,11 @@ public class ClubService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public Club registerClub(Club club) {
+    public ClubDTO registerClub(Club club) {
         String encodedPassword = passwordEncoder.encode(club.getPassword());
         club.setPassword(encodedPassword);
-        return clubRepository.save(club);
-
+        clubRepository.save(club);
+        return mapToDTO(club);
     }
 
     public ClubDTO getClubDetails(Long id) {

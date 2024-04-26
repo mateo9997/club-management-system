@@ -22,7 +22,7 @@ public class ClubController {
     private ClubService clubService;
 
     @PostMapping
-    public Club registerClub(@RequestBody Club club) {
+    public ClubDTO registerClub(@RequestBody Club club) {
         System.out.println("Received password: " + club.getPassword());
         return clubService.registerClub(club);
     }
