@@ -26,11 +26,6 @@ public class ClubController {
         return clubService.registerClub(club);
     }
 
-    @PostMapping("{/health}")
-    public String health() {
-        return "health";
-    }
-
     // Get all public clubs
     @GetMapping
     public ResponseEntity<List<ClubPublicInfo>> listPublicClubs() {
