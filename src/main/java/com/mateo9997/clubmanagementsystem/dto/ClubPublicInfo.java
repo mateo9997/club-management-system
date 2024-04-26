@@ -13,7 +13,6 @@ public class ClubPublicInfo {
         this.popularName = popularName;
         this.federation = federation;
         this.isPublic = isPublic;
-        this.numberOfPlayers = numberOfPlayers;
     }
 
     public String getOfficialName() {
@@ -48,13 +47,4 @@ public class ClubPublicInfo {
         isPublic = aPublic;
     }
 
-    public int getNumberOfPlayers() {
-        return numberOfPlayers;
-    }
-
-    public void setNumberOfPlayers(int numberOfPlayers) {
-        this.numberOfPlayers = numberOfPlayers;
-    }
-
-    // Getters and setters
 }

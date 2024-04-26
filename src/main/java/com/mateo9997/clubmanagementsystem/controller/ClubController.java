@@ -63,7 +63,7 @@ public class ClubController {
             throw new AccessDeniedException("Access denied");
         }
 
-        Club updatedClub = clubService.updateClub(clubId, clubDetails);
+        ClubDTO updatedClub = clubService.updateClub(clubId, clubDetails);
         return ResponseEntity.ok(updatedClub);
     }
 

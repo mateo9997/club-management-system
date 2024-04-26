@@ -39,9 +39,8 @@ public class ClubServiceTest {
         when(passwordEncoder.encode("rawPassword")).thenReturn("encodedPassword");
         when(clubRepository.save(any(Club.class))).thenReturn(club);
 
-        Club registeredClub = clubService.registerClub(club);
+        ClubDTO registeredClub = clubService.registerClub(club);
 
-        assertEquals("encodedPassword", registeredClub.getPassword());
         verify(clubRepository).save(club);
         verify(passwordEncoder).encode("rawPassword");
     }
@@ -78,7 +77,7 @@ public class ClubServiceTest {
         when(clubRepository.findById(1L)).thenReturn(Optional.of(existingClub));
         when(clubRepository.save(existingClub)).thenReturn(existingClub);
 
-        Club result = clubService.updateClub(1L, updatedClub);
+        ClubDTO result = clubService.updateClub(1L, updatedClub);
 
         assertEquals("Updated Name", result.getOfficialName());
         verify(clubRepository).save(existingClub);

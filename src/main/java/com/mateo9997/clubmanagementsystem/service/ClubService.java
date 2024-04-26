@@ -43,7 +43,7 @@ public class ClubService {
 
 
     @Transactional
-    public Club updateClub(Long clubId, Club clubDetails) {
+    public ClubDTO updateClub(Long clubId, Club clubDetails) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new NoSuchElementException("Club not found with id: " + clubId));
 
@@ -51,8 +51,8 @@ public class ClubService {
         club.setPopularName(clubDetails.getPopularName());
         club.setFederation(clubDetails.getFederation());
         club.setPublic(clubDetails.isPublic());
-
-        return clubRepository.save(club);
+        clubRepository.save(club);
+        return mapToDTO(club);
     }
 
     public List<Club> findAllPublicClubs() {

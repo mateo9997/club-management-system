@@ -1,6 +1,7 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mateo9997.clubmanagementsystem.dto.ClubDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
 import com.mateo9997.clubmanagementsystem.repository.ClubRepository;
@@ -74,7 +75,7 @@ public class PlayerControllerIntegrationTest {
         club.setFederation("FIFA");
         club.setPublic(true);
 
-        Club savedClub = clubService.registerClub(club);
+        ClubDTO savedClub = clubService.registerClub(club);
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(club.getUsername(), "password123")
@@ -118,9 +119,13 @@ public class PlayerControllerIntegrationTest {
         mockMvc.perform(get("/club/{clubId}/player", clubId)
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))  // Verify that exactly two players are returned
-                .andExpect(jsonPath("$.[0].email").exists())
-                .andExpect(jsonPath("$.[1].email").exists());
+                .andExpect(jsonPath("$", hasSize(2)))  
+                .andExpect(jsonPath("$.[0].id").exists())
+                .andExpect(jsonPath("$.[1].id").exists())
+                .andExpect(jsonPath("$.[0].givenName").exists())
+                .andExpect(jsonPath("$.[1].givenName").exists())
+                .andExpect(jsonPath("$.[0].familyName").exists())
+                .andExpect(jsonPath("$.[1].familyName").exists());
 
         // Fetch the created player's ID
         Player createdPlayer = playerService.listPlayers(clubId).get(0);
