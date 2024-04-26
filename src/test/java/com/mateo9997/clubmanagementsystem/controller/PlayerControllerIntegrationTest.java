@@ -1,6 +1,7 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mateo9997.clubmanagementsystem.dto.ClubDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
 import com.mateo9997.clubmanagementsystem.repository.ClubRepository;
@@ -74,7 +75,7 @@ public class PlayerControllerIntegrationTest {
         club.setFederation("FIFA");
         club.setPublic(true);
 
-        Club savedClub = clubService.registerClub(club);
+        ClubDTO savedClub = clubService.registerClub(club);
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(club.getUsername(), "password123")
