@@ -119,9 +119,13 @@ public class PlayerControllerIntegrationTest {
         mockMvc.perform(get("/club/{clubId}/player", clubId)
                         .header("Authorization", "Bearer " + authToken))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)))  // Verify that exactly two players are returned
-                .andExpect(jsonPath("$.[0].email").exists())
-                .andExpect(jsonPath("$.[1].email").exists());
+                .andExpect(jsonPath("$", hasSize(2)))  
+                .andExpect(jsonPath("$.[0].id").exists())
+                .andExpect(jsonPath("$.[1].id").exists())
+                .andExpect(jsonPath("$.[0].givenName").exists())
+                .andExpect(jsonPath("$.[1].givenName").exists())
+                .andExpect(jsonPath("$.[0].familyName").exists())
+                .andExpect(jsonPath("$.[1].familyName").exists());
 
         // Fetch the created player's ID
         Player createdPlayer = playerService.listPlayers(clubId).get(0);
