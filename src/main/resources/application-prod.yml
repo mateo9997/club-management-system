@@ -8,6 +8,11 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  flyway:
+    url: ${JDBC_DATABASE_URL}
+    user: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+    locations: classpath:db/migration
 jwt:
   secret: ${JWT_SECRET:ActualVerySecretKey}
 logging:
