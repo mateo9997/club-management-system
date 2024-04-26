@@ -18,7 +18,7 @@ public class Club {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @Column()
+    @Column(nullable = false)
     private String password;
 
     @Column(name = "official_name", nullable = false)
