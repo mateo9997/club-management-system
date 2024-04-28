@@ -1,6 +1,5 @@
 package com.mateo9997.clubmanagementsystem.service;
 
-import com.mateo9997.clubmanagementsystem.dto.PlayerDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
 import com.mateo9997.clubmanagementsystem.repository.ClubRepository;
@@ -79,7 +78,7 @@ public class PlayerServiceTest {
         when(playerRepository.findByIdAndClubId(1L, 1L)).thenReturn(Optional.of(existingPlayer));
         when(playerRepository.save(existingPlayer)).thenReturn(existingPlayer);
 
-        PlayerDTO updatedPlayer = playerService.updatePlayer(1L, 1L, newDetails);
+        Player updatedPlayer = playerService.updatePlayer(1L, 1L, newDetails);
 
         assertEquals("Johnny", updatedPlayer.getGivenName());
         verify(playerRepository).save(existingPlayer);
@@ -118,7 +117,7 @@ public class PlayerServiceTest {
 
         when(playerRepository.findByIdAndClubId(1L, 1L)).thenReturn(Optional.of(player));
 
-        PlayerDTO result = playerService.getPlayerDetails(1L, 1L);
+        Player result = playerService.getPlayerDetails(1L, 1L);
 
         assertNotNull(result);
         assertEquals(1L, result.getId());
