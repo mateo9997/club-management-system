@@ -1,0 +1,14 @@
+runtime: java17
+env: flex
+
+env_variables:
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://google/clubmanagementsystem?cloudSqlInstance=club-management-system-421523:europe-southwest1:usuario&socketFactory=com.google.cloud.sql.postgres.SocketFactory&sslmode=disable"
+  SPRING_DATASOURCE_USERNAME: "usuario"
+  SPRING_DATASOURCE_PASSWORD: "contraseña"
+  JWT_SECRET: "YourVerySecretKeyHere"
+
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 2
+  cpu_utilization:
+    target_utilization: 0.6
