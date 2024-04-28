@@ -30,7 +30,8 @@ public class PlayerController {
     public ResponseEntity<?> createPlayer(@PathVariable Long clubId, @RequestBody Player player) {
         verifyClubAccess(clubId);
         Player newPlayer = playerService.createPlayer(clubId, player);
-        return ResponseEntity.ok(newPlayer);
+        PlayerDTO playerDTO = mapToDTO(newPlayer);
+        return ResponseEntity.ok(playerDTO);
     }
 
     // List all players in a club
@@ -54,16 +55,18 @@ public class PlayerController {
     @GetMapping("/{playerId}")
     public ResponseEntity<PlayerDTO> getPlayerDetails(@PathVariable Long clubId, @PathVariable Long playerId) {
         verifyClubAccess(clubId);
-        PlayerDTO player = playerService.getPlayerDetails(clubId, playerId);
-        return ResponseEntity.ok(player);
+        Player player = playerService.getPlayerDetails(clubId, playerId);
+        PlayerDTO dto = mapToDTO(player);
+        return ResponseEntity.ok(dto);
     }
 
     // Update player details
     @PutMapping("/{playerId}")
     public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable Long clubId, @PathVariable Long playerId, @RequestBody Player playerDetails) {
         verifyClubAccess(clubId);
-        PlayerDTO updatedPlayer = playerService.updatePlayer(clubId, playerId, playerDetails);
-        return ResponseEntity.ok(updatedPlayer);
+        Player updatedPlayer = playerService.updatePlayer(clubId, playerId, playerDetails);
+        PlayerDTO dto = mapToDTO(updatedPlayer);
+        return ResponseEntity.ok(dto);
     }
 
     // Delete a player
@@ -89,4 +92,14 @@ public class PlayerController {
         throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
     }
 
+    private PlayerDTO mapToDTO(Player player) {
+        PlayerDTO dto = new PlayerDTO();
+        dto.setId(player.getId());
+        dto.setGivenName(player.getGivenName());
+        dto.setFamilyName(player.getFamilyName());
+        dto.setNationality(player.getNationality());
+        dto.setEmail(player.getEmail());
+        dto.setDateOfBirth(player.getDateOfBirth());
+        return dto;
+    }
 }

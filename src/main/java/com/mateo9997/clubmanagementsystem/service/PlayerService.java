@@ -1,6 +1,5 @@
 package com.mateo9997.clubmanagementsystem.service;
 
-import com.mateo9997.clubmanagementsystem.dto.PlayerDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
 import com.mateo9997.clubmanagementsystem.repository.ClubRepository;
@@ -37,7 +36,7 @@ public class PlayerService {
     }
 
     @Transactional
-    public PlayerDTO updatePlayer(Long clubId, Long playerId, Player playerDetails) {
+    public Player updatePlayer(Long clubId, Long playerId, Player playerDetails) {
         Player player = playerRepository.findByIdAndClubId(playerId, clubId)
                 .orElseThrow(() -> new NoSuchElementException("Player not found with id: " + playerId));
 
@@ -47,8 +46,7 @@ public class PlayerService {
         player.setEmail(playerDetails.getEmail());
         player.setDateOfBirth(playerDetails.getDateOfBirth());
 
-        playerRepository.save(player);
-        return mapToDTO(player);
+        return playerRepository.save(player);
     }
 
     @Transactional
@@ -60,20 +58,8 @@ public class PlayerService {
     }
 
     @Transactional
-    public PlayerDTO getPlayerDetails(Long clubId, Long playerId) {
-        Player player = playerRepository.findByIdAndClubId(playerId, clubId)
+    public Player getPlayerDetails(Long clubId, Long playerId) {
+        return playerRepository.findByIdAndClubId(playerId, clubId)
                 .orElseThrow(() -> new NoSuchElementException("Player not found with id: " + playerId + " and clubId: " + clubId));
-        return mapToDTO(player);
-    }
-
-    private PlayerDTO mapToDTO(Player player) {
-        PlayerDTO dto = new PlayerDTO();
-        dto.setId(player.getId());
-        dto.setGivenName(player.getGivenName());
-        dto.setFamilyName(player.getFamilyName());
-        dto.setNationality(player.getNationality());
-        dto.setEmail(player.getEmail());
-        dto.setDateOfBirth(player.getDateOfBirth());
-        return dto;
     }
 }
