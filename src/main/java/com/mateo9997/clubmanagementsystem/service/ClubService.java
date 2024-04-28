@@ -33,7 +33,7 @@ public class ClubService {
     public Club updateClub(Long clubId, Club clubDetails) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new NoSuchElementException("Club not found with id: " + clubId));
-
+        club.setUsername(clubDetails.getUsername());
         club.setOfficialName(clubDetails.getOfficialName());
         club.setPopularName(clubDetails.getPopularName());
         club.setFederation(clubDetails.getFederation());

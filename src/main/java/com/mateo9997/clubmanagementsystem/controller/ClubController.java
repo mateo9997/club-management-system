@@ -23,7 +23,6 @@ public class ClubController {
 
     @PostMapping
     public ClubDTO registerClub(@RequestBody Club club) {
-        System.out.println("Received password: " + club.getPassword());
         return mapToDTO(clubService.registerClub(club));
     }
 
@@ -31,13 +30,12 @@ public class ClubController {
     @GetMapping
     public ResponseEntity<List<ClubPublicInfo>> listPublicClubs() {
         List<Club> clubs = clubService.findAllPublicClubs();
-        // Convert to DTO to avoid sending sensitive data
         List<ClubPublicInfo> publicClubs = clubs.stream().map(club -> new ClubPublicInfo(
                 club.getOfficialName(),
                 club.getPopularName(),
                 club.getFederation(),
                 club.isPublic(),
-                club.getPlayers().size() // Just the size but not the player details
+                club.getPlayers().size()
         )).collect(Collectors.toList());
 
         return ResponseEntity.ok(publicClubs);
