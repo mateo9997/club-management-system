@@ -24,7 +24,7 @@ public class ClubController {
     @PostMapping
     public ClubDTO registerClub(@RequestBody Club club) {
         System.out.println("Received password: " + club.getPassword());
-        return clubService.registerClub(club);
+        return mapToDTO(clubService.registerClub(club));
     }
 
     // Get all public clubs
@@ -51,7 +51,7 @@ public class ClubController {
             throw new AccessDeniedException("Access denied");
         }
 
-        ClubDTO club = clubService.getClubDetails(clubId);
+        ClubDTO club = mapToDTO(clubService.getClubDetails(clubId));
         return ResponseEntity.ok(club);
     }
 
@@ -63,7 +63,7 @@ public class ClubController {
             throw new AccessDeniedException("Access denied");
         }
 
-        ClubDTO updatedClub = clubService.updateClub(clubId, clubDetails);
+        ClubDTO updatedClub = mapToDTO(clubService.updateClub(clubId, clubDetails));
         return ResponseEntity.ok(updatedClub);
     }
 
@@ -76,5 +76,15 @@ public class ClubController {
         throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
     }
 
+    private ClubDTO mapToDTO(Club club) {
+        ClubDTO dto = new ClubDTO();
+        dto.setId(club.getId());
+        dto.setUsername(club.getUsername());
+        dto.setOfficialName(club.getOfficialName());
+        dto.setPopularName(club.getPopularName());
+        dto.setFederation(club.getFederation());
+        dto.setPublic(club.isPublic());
+        return dto;
+    }
 
 }
