@@ -1,36 +1,34 @@
 package com.mateo9997.clubmanagementsystem.security;
 
-import com.mateo9997.clubmanagementsystem.model.Club;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.Collection;
 import java.util.Collections;
 
-public class ClubUserDetails implements UserDetails {
-    private Club club;
+public class CustomUserDetails implements UserDetails {
 
-    public ClubUserDetails(Club club) {
-        this.club = club;
-    }
+    private String username;
+    private String password;
 
-    public Club getClub() {
-        return club;
+    public CustomUserDetails(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList();
+        // No authorities are being set, as it's not required for this simple scenario
+        return Collections.emptySet();
     }
 
     @Override
     public String getPassword() {
-        return club.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return club.getUsername();
+        return username;
     }
 
     @Override

@@ -1,7 +1,6 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
 import com.mateo9997.clubmanagementsystem.model.Club;
-import com.mateo9997.clubmanagementsystem.security.CustomUserDetailsService;
 import com.mateo9997.clubmanagementsystem.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,9 +24,6 @@ public class AuthenticationController {
 
     @Autowired
     private JwtUtil jwtTokenUtil;
-
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
 
     @PostMapping
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Club authenticationRequest) throws Exception {

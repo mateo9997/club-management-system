@@ -3,7 +3,6 @@ package com.mateo9997.clubmanagementsystem.controller;
 import com.mateo9997.clubmanagementsystem.dto.ClubDTO;
 import com.mateo9997.clubmanagementsystem.dto.ClubPublicInfo;
 import com.mateo9997.clubmanagementsystem.model.Club;
-import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -11,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,34 +44,38 @@ public class ClubController {
     // Get details of a specific club
     @GetMapping("/{clubId}")
     public ResponseEntity<?> getClubDetails(@PathVariable Long clubId) {
-        Club requestingClub = getAuthenticatedClub();
-        if (!requestingClub.getId().equals(clubId)) {
+        if (!verifyClubAccess(clubId)) {
             throw new AccessDeniedException("Access denied");
         }
-
-        ClubDTO club = mapToDTO(clubService.getClubDetails(clubId));
-        return ResponseEntity.ok(club);
+        Club club = clubService.getClubDetails(clubId); // This method should return the Club object
+        ClubDTO clubDTO = mapToDTO(club);
+        return ResponseEntity.ok(clubDTO);
     }
 
     // Update club details
     @PutMapping("/{clubId}")
     public ResponseEntity<?> updateClub(@PathVariable Long clubId, @RequestBody Club clubDetails) {
-        Club requestingClub = getAuthenticatedClub();
-        if (!requestingClub.getId().equals(clubId)) {
+        if (!verifyClubAccess(clubId)) {
             throw new AccessDeniedException("Access denied");
         }
-
-        ClubDTO updatedClub = mapToDTO(clubService.updateClub(clubId, clubDetails));
-        return ResponseEntity.ok(updatedClub);
+        Club updatedClub = clubService.updateClub(clubId, clubDetails);
+        ClubDTO updatedClubDTO = mapToDTO(updatedClub);
+        return ResponseEntity.ok(updatedClubDTO);
     }
 
+    // Utility method to verify access for the authenticated club
+    private boolean verifyClubAccess(Long clubId) {
+        String username = getAuthenticatedUsername();
+        Club club = clubService.findByUsername(username);
+        return club.getId().equals(clubId);
+    }
 
-    private Club getAuthenticatedClub() {
+    private String getAuthenticatedUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.getPrincipal() instanceof ClubUserDetails) {
-            return ((ClubUserDetails) authentication.getPrincipal()).getClub();
+        if (authentication.getPrincipal() instanceof UserDetails) {
+            return ((UserDetails) authentication.getPrincipal()).getUsername();
         }
-        throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
+        throw new IllegalStateException("Authenticated user is not recognized");
     }
 
     private ClubDTO mapToDTO(Club club) {

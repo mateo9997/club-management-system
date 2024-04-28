@@ -2,7 +2,6 @@ package com.mateo9997.clubmanagementsystem.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mateo9997.clubmanagementsystem.model.Club;
-import com.mateo9997.clubmanagementsystem.security.CustomUserDetailsService;
 import com.mateo9997.clubmanagementsystem.security.JwtAuthenticationEntryPoint;
 import com.mateo9997.clubmanagementsystem.util.JwtUtil;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -39,9 +37,6 @@ public class AuthenticationControllerTest {
 
     @MockBean
     private JwtUtil jwtUtil;
-
-    @MockBean
-    private CustomUserDetailsService customUserDetailsService;
 
     @MockBean
     private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;

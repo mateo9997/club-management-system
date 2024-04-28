@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface PlayerRepository extends JpaRepository<Player, Long> {
     List<Player> findByClubId(Long clubId);
     Optional<Player> findByIdAndClubId(Long playerId, Long clubId);
+    Optional<Player> findTopByClubId(Long clubId);
 }

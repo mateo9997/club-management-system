@@ -62,4 +62,13 @@ public class PlayerService {
         return playerRepository.findByIdAndClubId(playerId, clubId)
                 .orElseThrow(() -> new NoSuchElementException("Player not found with id: " + playerId + " and clubId: " + clubId));
     }
+
+    public Player findPlayerById(Long playerId) {
+        return clubRepository.findPlayerById(playerId);
+    }
+
+    public Player findAnyPlayerByClubId(Long clubId) {
+        return playerRepository.findTopByClubId(clubId)
+                .orElseThrow(() -> new NoSuchElementException("No player found for club ID: " + clubId));
+    }
 }
