@@ -5,11 +5,12 @@ import com.mateo9997.clubmanagementsystem.model.Player;
 import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +74,7 @@ public class PlayerController {
     private void verifyClubAccess(Long clubId) {
         Long authenticatedClubId = getAuthenticatedClubId();
         if (!authenticatedClubId.equals(clubId)) {
-            throw new AccessDeniedException("Access denied");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
         }
     }
 
