@@ -75,7 +75,7 @@ public class PlayerControllerIntegrationTest {
         club.setFederation("FIFA");
         club.setPublic(true);
 
-        Club savedClub = clubService.registerClub(club);
+        ClubDTO savedClub = clubService.registerClub(club);
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(club.getUsername(), "password123")

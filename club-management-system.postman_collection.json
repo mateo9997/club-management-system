@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "8e05e174-a5f6-45d0-88e4-b463c807b78e",
 		"name": "club-management-system",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "34536410"
 	},
 	"item": [
@@ -20,76 +20,62 @@
 					}
 				}
 			],
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
 			"request": {
-				"auth": {
-					"type": "noauth"
-				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"si\",\r\n  \"password\": \"si\",\r\n  \"officialName\": \"Town Football Club\",\r\n  \"popularName\": \"Town FC\",\r\n  \"federation\": \"FIFA\",\r\n  \"public\": true\r\n}",
+					"raw": "{\r\n  \"username\": \"info@townfc.com\",\r\n  \"password\": \"iTk19!n.\",\r\n  \"officialName\": \"Town Football Club\",\r\n  \"popularName\": \"Town FC\",\r\n  \"federation\": \"FIFA\",\r\n  \"public\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club"
-			},
-			"response": []
-		},
-		{
-			"name": "login",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/club",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"club"
+					]
 				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"si\",\r\n  \"password\": \"si\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/login"
 			},
 			"response": []
 		},
 		{
 			"name": "update club",
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"username\": \"hola\",\r\n  \"password\": \"hola\",\r\n  \"officialName\": \"Updated Town Football Club\",\r\n  \"popularName\": \"Town FC\",\r\n  \"federation\": \"FIFA\",\r\n  \"public\": true\r\n}\r\n",
+					"raw": "{\r\n  \"name\": \"Updated Club Name\",\r\n  \"description\": \"Updated description of the club.\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club/{{clubId}}"
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/{clubId}",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"{clubId}"
+					]
+				}
 			},
 			"response": []
 		},
@@ -111,6 +97,9 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -122,40 +111,18 @@
 						}
 					}
 				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club"
-			},
-			"response": []
-		},
-		{
-			"name": "get club",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/club",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"club"
+					]
 				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club/{{clubId}}"
 			},
 			"response": []
 		},
@@ -177,18 +144,34 @@
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "",
+					"raw": "{\r\n  \"username\": \"info@townfc.com\",\r\n  \"password\": \"iTk19!n.\",\r\n  \"officialName\": \"Town Football Club\",\r\n  \"popularName\": \"Town FC\",\r\n  \"federation\": \"FIFA\",\r\n  \"public\": true\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club/{{clubId}}/player"
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/club/{clubId}/player",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"club",
+						"{clubId}",
+						"player"
+					]
+				}
 			},
 			"response": []
 		},
@@ -207,18 +190,35 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"givenName\": \"John\",\r\n  \"familyName\": \"Doe\",\r\n  \"nationality\": \"USA\",\r\n  \"email\": \"GG@example.com\",\r\n  \"dateOfBirth\": \"1990-01-01\"\r\n}",
+					"raw": "{\r\n  \"clubId\": 1,\r\n  \"givenName\": \"John\",\r\n  \"familyName\": \"Doe\",\r\n  \"nationality\": \"USA\",\r\n  \"email\": \"john.doe@example.com\",\r\n  \"dateOfBirth\": \"1990-01-01\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club/{{clubId}}/player/{{playerId}}"
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/club/{clubId}/player/{playerId}",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"club",
+						"{clubId}",
+						"player",
+						"{playerId}"
+					]
+				}
 			},
 			"response": []
 		},
@@ -237,18 +237,35 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"givenName\": \"John\",\r\n  \"familyName\": \"Doe\",\r\n  \"nationality\": \"USA\",\r\n  \"email\": \"GG@example.com\",\r\n  \"dateOfBirth\": \"1990-01-01T00:00:00.000+00:00\"\r\n}",
+					"raw": "{\r\n  \"clubId\": 1,\r\n  \"givenName\": \"Updated Name\",\r\n  \"familyName\": \"Updated Family Name\",\r\n  \"nationality\": \"Updated Nationality\",\r\n  \"email\": \"updated.email@example.com\",\r\n  \"dateOfBirth\": \"1990-02-02\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
 						}
 					}
 				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club/{{clubId}}/player/{{playerId}}"
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/club/{clubId}/player/{playerId}",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"club",
+						"{clubId}",
+						"player",
+						"{playerId}"
+					]
+				}
 			},
 			"response": []
 		},
@@ -267,6 +284,9 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "bearer"
+				},
 				"method": "DELETE",
 				"header": [],
 				"body": {
@@ -278,49 +298,67 @@
 						}
 					}
 				},
-				"url": "https://club-management-system-63be8edb95dc.herokuapp.com/club/{{clubId}}/player/{{playerId}}"
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/club/{clubId}/player/{playerId}",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"club",
+						"{clubId}",
+						"player",
+						"{playerId}"
+					]
+				}
 			},
 			"response": []
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": {
-			"token": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzaSIsImlhdCI6MTcxNDMwMTU0NSwiZXhwIjoxNzE0MzM3NTQ1fQ.dVoCdO7WZH5i35r-pcaNmV64Sndlvxmg2_64_AOS60M"
-		}
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
 		},
 		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "clubId",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "playerId",
-			"value": "",
-			"type": "string"
+			"name": "login",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"username\": \"info@townfc.com\",\r\n  \"password\": \"iTk19!n.\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://club-management-system-fc2708e9f8ff.herokuapp.com/login",
+					"protocol": "https",
+					"host": [
+						"club-management-system-fc2708e9f8ff",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
