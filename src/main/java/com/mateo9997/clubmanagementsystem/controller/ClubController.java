@@ -6,11 +6,13 @@ import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -42,24 +44,32 @@ public class ClubController {
 
     @GetMapping("/{clubId}")
     public ResponseEntity<?> getClubDetails(@PathVariable Long clubId) {
-        long authenticatedClubId = getAuthenticatedClubId();
-        if (authenticatedClubId != clubId) {
-            throw new AccessDeniedException("Access denied");
-        }
+        try {
+            long authenticatedClubId = getAuthenticatedClubId();
+            if (authenticatedClubId != clubId) {
+                throw new AccessDeniedException("Access denied");
+            }
 
-        ClubDTO club = mapToDTO(clubService.getClubDetails(clubId));
-        return ResponseEntity.ok(club);
+            ClubDTO club = mapToDTO(clubService.getClubDetails(clubId));
+            return ResponseEntity.ok(club);
+        } catch (AccessDeniedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        }
     }
 
     @PutMapping("/{clubId}")
     public ResponseEntity<?> updateClub(@PathVariable Long clubId, @RequestBody Club clubDetails) {
-        long authenticatedClubId = getAuthenticatedClubId();
-        if (authenticatedClubId != clubId) {
-            throw new AccessDeniedException("Access denied");
-        }
+        try {
+            long authenticatedClubId = getAuthenticatedClubId();
+            if (authenticatedClubId != clubId) {
+                throw new AccessDeniedException("Access denied");
+            }
 
-        ClubDTO updatedClub = mapToDTO(clubService.updateClub(clubId, clubDetails));
-        return ResponseEntity.ok(updatedClub);
+            ClubDTO updatedClub = mapToDTO(clubService.updateClub(clubId, clubDetails));
+            return ResponseEntity.ok(updatedClub);
+        } catch (AccessDeniedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access Denied", e);
+        }
     }
 
     private long getAuthenticatedClubId() {
@@ -80,4 +90,6 @@ public class ClubController {
         dto.setPublic(club.isPublic());
         return dto;
     }
+
 }
+
