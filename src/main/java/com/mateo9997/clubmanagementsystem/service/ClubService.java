@@ -18,41 +18,29 @@ public class ClubService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public ClubDTO registerClub(Club club) {
+    public Club registerClub(Club club) {
         String encodedPassword = passwordEncoder.encode(club.getPassword());
         club.setPassword(encodedPassword);
-        clubRepository.save(club);
-        return mapToDTO(club);
+        return clubRepository.save(club);
     }
 
-    public ClubDTO getClubDetails(Long id) {
-        Club club = clubRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Club not found"));
-        return mapToDTO(club);
-    }
-
-    private ClubDTO mapToDTO(Club club) {
-        ClubDTO dto = new ClubDTO();
-        dto.setId(club.getId());
-        dto.setUsername(club.getUsername());
-        dto.setOfficialName(club.getOfficialName());
-        dto.setPopularName(club.getPopularName());
-        dto.setFederation(club.getFederation());
-        dto.setPublic(club.isPublic());
-        return dto;
+    public Club getClubDetails(Long id) {
+        return clubRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Club not found"));
     }
 
 
     @Transactional
-    public ClubDTO updateClub(Long clubId, Club clubDetails) {
+    public Club updateClub(Long clubId, Club clubDetails) {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new NoSuchElementException("Club not found with id: " + clubId));
-
+        club.setUsername(clubDetails.getUsername());
+        club.setPassword(clubDetails.getPassword());
         club.setOfficialName(clubDetails.getOfficialName());
         club.setPopularName(clubDetails.getPopularName());
         club.setFederation(clubDetails.getFederation());
         club.setPublic(clubDetails.isPublic());
-        clubRepository.save(club);
-        return mapToDTO(club);
+
+        return clubRepository.save(club);
     }
 
     public List<Club> findAllPublicClubs() {
