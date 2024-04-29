@@ -34,7 +34,6 @@ public class ClubService {
         Club club = clubRepository.findById(clubId)
                 .orElseThrow(() -> new NoSuchElementException("Club not found with id: " + clubId));
         club.setUsername(clubDetails.getUsername());
-        club.setPassword(clubDetails.getPassword());
         club.setOfficialName(clubDetails.getOfficialName());
         club.setPopularName(clubDetails.getPopularName());
         club.setFederation(clubDetails.getFederation());
