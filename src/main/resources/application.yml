@@ -18,5 +18,10 @@ logging:
     root: INFO
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /swagger-ui
+
 
 

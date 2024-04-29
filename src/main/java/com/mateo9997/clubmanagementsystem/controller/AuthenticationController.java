@@ -15,6 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/login")
@@ -26,8 +30,14 @@ public class AuthenticationController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
+
     @PostMapping
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody Club authenticationRequest) throws Exception {
+    @ApiOperation(value = "Authenticate a club and return a JWT token")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully authenticated"),
+            @ApiResponse(code = 401, message = "Invalid credentials provided")
+    })
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody Club authenticationRequest) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -36,13 +46,12 @@ public class AuthenticationController {
                     )
             );
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-
-            Long clubId = ((ClubUserDetails)userDetails).getClubId();
+            Long clubId = ((ClubUserDetails) userDetails).getClubId();
             final String token = jwtTokenUtil.generateToken(userDetails.getUsername(), clubId);
 
             return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Invalid credentials");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials", e);
         }
     }
 }

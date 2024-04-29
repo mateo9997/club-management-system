@@ -6,7 +6,6 @@ public class ClubPublicInfo {
     private String popularName;
     private String federation;
     private boolean isPublic;
-    private int numberOfPlayers;
 
     public ClubPublicInfo(String officialName, String popularName, String federation, boolean isPublic, int numberOfPlayers) {
         this.officialName = officialName;
