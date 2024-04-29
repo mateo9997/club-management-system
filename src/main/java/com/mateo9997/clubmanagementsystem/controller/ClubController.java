@@ -31,7 +31,10 @@ public class ClubController {
     @ApiResponse(code = 200, message = "Club registered successfully")
     @PostMapping
     public ClubDTO registerClub(@RequestBody Club club) {
+<<<<<<< main
         return mapToDTO(clubService.registerClub(club));
+=======
+>>>>>>> release
     }
 
     @ApiOperation(value = "List all public clubs", notes = "Retrieve a list of all public clubs.")
