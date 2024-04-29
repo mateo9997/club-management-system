@@ -1,6 +1,5 @@
 package com.mateo9997.clubmanagementsystem.security;
 
-import com.mateo9997.clubmanagementsystem.model.Club;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,14 +7,18 @@ import java.util.Collection;
 import java.util.Collections;
 
 public class ClubUserDetails implements UserDetails {
-    private Club club;
+    private String username;
+    private String password;
+    private Long clubId;
 
-    public ClubUserDetails(Club club) {
-        this.club = club;
+    public ClubUserDetails(String username, String password, Long clubId) {
+        this.username = username;
+        this.password = password;
+        this.clubId = clubId;
     }
 
-    public Club getClub() {
-        return club;
+    public Long getClubId() {
+        return clubId;
     }
 
     @Override
@@ -25,12 +28,12 @@ public class ClubUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return club.getPassword();
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return club.getUsername();
+        return username;
     }
 
     @Override
@@ -53,4 +56,5 @@ public class ClubUserDetails implements UserDetails {
         return true;
     }
 }
+
 

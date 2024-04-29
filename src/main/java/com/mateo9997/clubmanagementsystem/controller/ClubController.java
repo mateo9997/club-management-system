@@ -26,7 +26,6 @@ public class ClubController {
         return mapToDTO(clubService.registerClub(club));
     }
 
-    // Get all public clubs
     @GetMapping
     public ResponseEntity<List<ClubPublicInfo>> listPublicClubs() {
         List<Club> clubs = clubService.findAllPublicClubs();
@@ -41,11 +40,10 @@ public class ClubController {
         return ResponseEntity.ok(publicClubs);
     }
 
-    // Get details of a specific club
     @GetMapping("/{clubId}")
     public ResponseEntity<?> getClubDetails(@PathVariable Long clubId) {
-        Club requestingClub = getAuthenticatedClub();
-        if (!requestingClub.getId().equals(clubId)) {
+        long authenticatedClubId = getAuthenticatedClubId();
+        if (authenticatedClubId != clubId) {
             throw new AccessDeniedException("Access denied");
         }
 
@@ -53,11 +51,10 @@ public class ClubController {
         return ResponseEntity.ok(club);
     }
 
-    // Update club details
     @PutMapping("/{clubId}")
     public ResponseEntity<?> updateClub(@PathVariable Long clubId, @RequestBody Club clubDetails) {
-        Club requestingClub = getAuthenticatedClub();
-        if (!requestingClub.getId().equals(clubId)) {
+        long authenticatedClubId = getAuthenticatedClubId();
+        if (authenticatedClubId != clubId) {
             throw new AccessDeniedException("Access denied");
         }
 
@@ -65,13 +62,12 @@ public class ClubController {
         return ResponseEntity.ok(updatedClub);
     }
 
-
-    private Club getAuthenticatedClub() {
+    private long getAuthenticatedClubId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof ClubUserDetails) {
-            return ((ClubUserDetails) authentication.getPrincipal()).getClub();
+            return ((ClubUserDetails) authentication.getPrincipal()).getClubId();
         }
-        throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
+        throw new IllegalStateException("Authenticated user is not of type CustomUserDetails");
     }
 
     private ClubDTO mapToDTO(Club club) {
@@ -84,5 +80,4 @@ public class ClubController {
         dto.setPublic(club.isPublic());
         return dto;
     }
-
 }

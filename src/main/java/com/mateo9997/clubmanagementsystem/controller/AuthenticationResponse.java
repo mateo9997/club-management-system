@@ -1,7 +1,7 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
 public class AuthenticationResponse {
-    private final String jwt;
+    private String jwt;
 
     public AuthenticationResponse(String jwt) {
         this.jwt = jwt;
@@ -9,5 +9,9 @@ public class AuthenticationResponse {
 
     public String getJwt() {
         return jwt;
+    }
+
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
     }
 }

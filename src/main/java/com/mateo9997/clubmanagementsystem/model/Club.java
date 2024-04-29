@@ -1,8 +1,6 @@
 package com.mateo9997.clubmanagementsystem.model;
 
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;

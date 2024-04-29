@@ -1,7 +1,6 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
 import com.mateo9997.clubmanagementsystem.dto.PlayerDTO;
-import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.model.Player;
 import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.service.PlayerService;
@@ -24,8 +23,6 @@ public class PlayerController {
     @Autowired
     private PlayerService playerService;
 
-    // Methods with added security checks
-    // Create a new player
     @PostMapping
     public ResponseEntity<?> createPlayer(@PathVariable Long clubId, @RequestBody Player player) {
         verifyClubAccess(clubId);
@@ -34,7 +31,6 @@ public class PlayerController {
         return ResponseEntity.ok(playerDTO);
     }
 
-    // List all players in a club
     @GetMapping
     public ResponseEntity<List<Map<String, Object>>> listPlayers(@PathVariable Long clubId) {
         verifyClubAccess(clubId);
@@ -51,7 +47,6 @@ public class PlayerController {
         return ResponseEntity.ok(playerSummaries);
     }
 
-    // Get details of a specific player
     @GetMapping("/{playerId}")
     public ResponseEntity<PlayerDTO> getPlayerDetails(@PathVariable Long clubId, @PathVariable Long playerId) {
         verifyClubAccess(clubId);
@@ -60,7 +55,6 @@ public class PlayerController {
         return ResponseEntity.ok(dto);
     }
 
-    // Update player details
     @PutMapping("/{playerId}")
     public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable Long clubId, @PathVariable Long playerId, @RequestBody Player playerDetails) {
         verifyClubAccess(clubId);
@@ -69,7 +63,6 @@ public class PlayerController {
         return ResponseEntity.ok(dto);
     }
 
-    // Delete a player
     @DeleteMapping("/{playerId}")
     public ResponseEntity<?> deletePlayer(@PathVariable Long clubId, @PathVariable Long playerId) {
         verifyClubAccess(clubId);
@@ -78,18 +71,18 @@ public class PlayerController {
     }
 
     private void verifyClubAccess(Long clubId) {
-        Club requestingClub = getAuthenticatedClub();
-        if (!requestingClub.getId().equals(clubId)) {
+        Long authenticatedClubId = getAuthenticatedClubId();
+        if (!authenticatedClubId.equals(clubId)) {
             throw new AccessDeniedException("Access denied");
         }
     }
 
-    private Club getAuthenticatedClub() {
+    private Long getAuthenticatedClubId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof ClubUserDetails) {
-            return ((ClubUserDetails) authentication.getPrincipal()).getClub();
+            return ((ClubUserDetails) authentication.getPrincipal()).getClubId();
         }
-        throw new IllegalStateException("Authenticated user is not of type ClubUserDetails");
+        throw new IllegalStateException("Authenticated user is not of type CustomUserDetails");
     }
 
     private PlayerDTO mapToDTO(Player player) {

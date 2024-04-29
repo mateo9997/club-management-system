@@ -1,7 +1,7 @@
 package com.mateo9997.clubmanagementsystem.controller;
 
 import com.mateo9997.clubmanagementsystem.model.Club;
-import com.mateo9997.clubmanagementsystem.security.CustomUserDetailsService;
+import com.mateo9997.clubmanagementsystem.security.ClubUserDetails;
 import com.mateo9997.clubmanagementsystem.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,17 +26,20 @@ public class AuthenticationController {
     @Autowired
     private JwtUtil jwtTokenUtil;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
     @PostMapping
     public ResponseEntity<?> createAuthenticationToken(@RequestBody Club authenticationRequest) throws Exception {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword())
+                    new UsernamePasswordAuthenticationToken(
+                            authenticationRequest.getUsername(),
+                            authenticationRequest.getPassword()
+                    )
             );
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            final String token = jwtTokenUtil.generateToken(userDetails.getUsername());
+
+            Long clubId = ((ClubUserDetails)userDetails).getClubId();
+            final String token = jwtTokenUtil.generateToken(userDetails.getUsername(), clubId);
+
             return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Error: Invalid credentials");

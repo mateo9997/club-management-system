@@ -1,6 +1,5 @@
 package com.mateo9997.clubmanagementsystem.service;
 
-import com.mateo9997.clubmanagementsystem.dto.ClubDTO;
 import com.mateo9997.clubmanagementsystem.model.Club;
 import com.mateo9997.clubmanagementsystem.repository.ClubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
